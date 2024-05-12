@@ -1,0 +1,30 @@
+const http=require('http');
+const url=require('url');
+
+const server=http.createServer(function (req, res) {
+    const method=req.method;
+    const u=url.parse(req.url,true);
+    const path=u.pathname;
+    if(method=="GET"){
+        if(path=="/home"){
+            res.end("<h1>This is Home page</h1>");
+        }
+        else if(path=="/about"){
+            res.end("<h1>This is ABout page </h1>");
+        }
+        else if(path=="/contact"){
+            res.end("<h1>This is contact page</h1>");
+        }
+        else {
+            res.end("<h1>404 NOT RESPOND</h1>");
+        }
+    }
+    else if(method=="POST"){
+
+    }
+    
+});
+
+server.listen(3030,function (){
+    console.log("server is running.....");
+});
