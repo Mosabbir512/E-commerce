@@ -1,0 +1,17 @@
+//   math.js file
+function add(a,b){
+    var ans=a+b;
+    console.log("sum is = "+ans);
+}
+function sub(a,b){
+    console.log("sub is= "+ (a-b));
+}
+module.exports={add,sub};
+
+
+//   app.js file
+
+const express=require('express');
+const sum=require('./math');
+sum.add(4,5);
+sum.sub(
