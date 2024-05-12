@@ -1,0 +1,32 @@
+
+const express=require('express');
+const app=express();
+
+app.use(express.json());          // middle wire
+
+app.get('/product/save/:pathName',(req, res)=>{
+    const param=req.params;
+    console.log(param);
+    console.log(param.pid);
+    console.log(param.pathName);
+
+    const query=req.query;
+    console.log(query);
+
+    res.send("<h1>This is home page </h1>");
+})
+ let pid=0;
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
