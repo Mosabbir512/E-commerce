@@ -1,0 +1,38 @@
+
+const express=require('express');
+const app=express();
+
+app.use(express.json());
+
+app.get('/product/save/:pathName',(req, res)=>{
+    const param=req.params;
+    console.log(param);
+    console.log(param.pid);
+    console.log(param.pathName);
+
+    const query=req.query;
+    console.log(query);
+
+    res.send("<h1>This is home page </h1>");
+})
+ let pid=0;
+app.use(function (req,res,next){       //     mid wire  or middle man
+    console.log("------------our first mid -----------");
+    console.log(req);
+    next();
+});
+
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
