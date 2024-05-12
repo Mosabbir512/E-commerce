@@ -1,0 +1,36 @@
+
+const express=require('express');
+const app=express();
+app.use(express.json());
+
+
+app.get('/product/:pid1/detail/:pname1',(req, res)=>{
+    const params=req.params;
+    const path=req.path;
+    console.log(path);
+    console.log(params);
+    console.log(params.pid1);
+    console.log(params.pname1);
+
+    const quires=req.query;
+    console.log(quires.min);
+    console.log(quires.max);
+
+    res.send("<h1>This is home page </h1>");
+})
+ let pid=0;
+
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
