@@ -1,0 +1,26 @@
+
+const express=require('express');
+const app=express();
+app.use(express.json());
+
+const routers=require('./router/routers');
+app.use('',routers);
+
+// ejs==engine   // first npm i ejs
+app.set('view engine','ejs');  // then set like this
+app.set('views',__dirname + '/views');   //  then set the path  // then set home.html->home.ejs
+
+
+app.listen(3000,()=>{
+    console.log("server is running....");
+})
+
+/////   router.js
+const express=require('express');
+const routers=express.Router();
+
+routers.get('/home',function (req,res){
+    res.render("home");
+});
+module.exports=routers;
+
