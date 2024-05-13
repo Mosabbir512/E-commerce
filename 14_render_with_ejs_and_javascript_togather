@@ -1,0 +1,70 @@
+
+const express=require('express');
+const app=express();
+app.use(express.json());
+
+// ejs==engine   // first npm i ejs
+app.set('view engine','ejs');  // then set like this
+app.set('views',__dirname + '/views');   //  then set the path  // then set home.html->home.ejs
+
+
+app.get('/home',function (req,res){
+    res.render("home");
+})
+
+app.get('/product/:pid1/detail/:pname1',(req, res)=>{
+    const params=req.params;
+    const path=req.path;
+    console.log(path);
+    console.log(params);
+    console.log(params.pid1);
+    console.log(params.pname1);
+
+    const quires=req.query;
+    console.log(quires.min);
+    console.log(quires.max);
+
+    res.send("<h1>This is home page </h1>");
+})
+ let pid=0;
+
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
+
+
+
+///  home.ejs file
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<body>
+ <h1>home page!</h1>
+ <p>My first page</p>
+<%
+   console.log("Not only but also he is singer and danser");
+   var a=45;
+   var b=56;
+   var c=a+b;
+%>
+
+sum = <%=c%>
+
+</body>
+</html>
+
