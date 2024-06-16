@@ -1,0 +1,21 @@
+const http=require('http');
+const url=require('url')
+const trace_events = require("trace_events");
+const server=http.createServer(function (req,res){
+    console.log("method===" + req.method);
+    console.log("url===" + req.url);
+    u=url.parse(req.url,true);
+
+    const path=u.path;
+    const query=u.query;
+    console.log(path);
+    console.log(query.name);
+    console.log(query.age);
+
+    res.end("hello");
+})
+
+
+server.listen(3000,function (){
+    console.log("server is running......");
+})
