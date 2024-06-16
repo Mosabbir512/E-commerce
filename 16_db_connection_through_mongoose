@@ -1,0 +1,39 @@
+//     db_config.js
+
+const mongoose=require('mongoose');
+const DB_URL="mongodb://localhost:27017/ict";
+function db_connection(){
+    mongoose.connect(DB_URL)
+        .then(()=>console.log("db conncetion succeess!"))
+        .catch(err=>console.log(`error occrured for err: ${err}`));
+};
+
+module.exports=db_connection;
+
+
+
+
+//        app.js  
+
+
+const express=require('express');
+const db_connection=require('./config/df_config');
+const app=express();
+
+
+db_connection();
+
+app.use(express.json());    //  middle wire
+
+const routers=require('./router/routers');    // require for routers we can say controller
+app.use('',routers);
+
+// ejs==engine   // first npm i ejs
+app.set('view engine','ejs');  // then set like this
+app.set('views',__dirname + '/views');   //  then set the path  // then set home.html->home.ejs
+
+
+app.listen(3000,()=>{
+    console.log("server is running....");
+})
+
