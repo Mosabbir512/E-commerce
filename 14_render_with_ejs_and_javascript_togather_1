@@ -1,0 +1,56 @@
+
+const express=require('express');
+const app=express();
+app.use(express.json());
+
+app.set('view engine','ejs');
+app.set('views',__dirname+'/views')
+
+app.get('/home',function (req,res){
+    res.render("home",{data:"hello amir hamja!"});
+});
+
+
+let pid=0;
+
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<body>
+ <h1>home page!</h1>
+ <p>My first page</p>
+
+<%
+   console.log("Not only but also he is singer and danger");
+   var a=45;
+   var b=56;
+   var c=a+b;
+%>
+
+sum = <%=c%>
+<br/>
+data = <%=data%>
+
+
+</body>
+</html>
