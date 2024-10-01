@@ -1,0 +1,186 @@
+
+// home.ejs
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>All Students</h2>
+    <a href="/add" class="btn btn-success" >+ ADD</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id:</th>
+            <th>Name</th>
+            <th>Cgpa:</th>
+            <th>Department:</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (var i=0;i<students.length;i++){ %>
+            <% const student=students[i] ; %>
+
+        <tr>
+            <td><%=student.id%></td>
+            <td><%=student.name%></td>
+            <td><%=student.cgpa%></td>
+            <td><%=student.dept%></td>
+        </tr>
+        <%  } %>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+
+
+
+// add_students.ejs
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add Student form</h2>
+    <form class="form-horizontal" action="/add" method="post">
+
+        <div class="form-group">
+            <label for="id">Id:</label>
+            <input type="text" class="form-control" id="id" placeholder="Enter student id" name="id">
+        </div>
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+        </div>
+
+        <div class="form-group">
+            <label for="cgpa">Cgpa:</label>
+            <input type="number" class="form-control" id="cgpa" placeholder="Enter cgpa" name="cgpa">
+        </div>
+
+        <div class="form-group">
+            <label for="dept">Dept:</label>
+            <select id="dept" class="form-control" name="dept">
+                <option value="ICT">ICT</option>
+                <option value="CSE">CSE</option>
+                <option value="TE">TE</option>
+                <option value="EEE">EEE</option>
+            </select>
+        </div>
+
+
+        <input class="btn btn-primary" type="submit" value="Save"/>
+
+    </form>
+</div>
+
+</body>
+</html>
+
+
+// routers.js file
+
+const express=require('express');
+const routers=express.Router();
+const Student=require("../model/student")
+routers.get('/home',function (req,res){
+    res.render("home1");
+});
+
+routers.get('/',async (req,res)=>{
+    const students=await Student.find();
+    res.render('home',{students: students});
+});
+routers.get('/add',(req,res)=>{
+   res.render('add_students');
+});
+routers.post('/add',async (req,res)=>{
+   const info=req.body;
+   const student=new Student({
+       id:info.id,
+       name:info.name,
+       cgpa:info.cgpa,
+       dept:info.dept
+   });
+   await student.save();  //blocking call
+   res.redirect('/');
+
+});
+module.exports=routers;
+
+
+
+// app.js file
+
+const express=require('express');
+const app=express();
+app.use(express.json());    //  middle wire
+
+const db_connection=require('./config/db_config');
+db_connection();
+app.use(express.urlencoded({extended:true})) //data body te anar jonno
+
+const routers=require('./router/routers');    // require for routers we can say controller
+app.use('',routers);
+
+// ejs==engine   // first npm i ejs
+app.set('view engine','ejs');  // then set like this
+app.set('views',__dirname + '/views');   //  then set the path  // then set home.html->home.ejs
+
+app.listen(3000,()=>{
+    console.log("server is running1....");
+})
+
+/*
+app.get('/product/:pid1/detail/:pname1',(req, res)=>{
+    const params=req.params;
+    const path=req.path;
+    console.log(path);
+    console.log(params);
+    console.log(params.pid1);
+    console.log(params.pname1);
+
+    const quires=req.query;
+    console.log(quires.min);
+    console.log(quires.max);
+
+    res.send("<h1>This is home page </h1>");
+})
+ let pid=0;
+
+app.post('/product/save',function (reg,res){
+    const body=reg.body;
+    pid++;
+    console.log(body);
+    const procuct={
+        id:pid,
+        name:body.name,
+        price:body.price
+    }
+    console.log(procuct);
+    res.json(procuct);
+});
+
+app.listen(3000,()=>console.log("server is running...."));
+
+ */
